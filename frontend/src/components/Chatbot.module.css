@@ -1,0 +1,10 @@
+.root { position: fixed; bottom: 16px; right: 16px; z-index: 50; }
+.fab { width: 56px; height: 56px; border-radius: 50%; background:#111827; color:#fff; border:none; font-size:22px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+.panel { position: absolute; bottom: 72px; right: 0; width: 320px; height: 420px; background:#fff; border:1px solid #e5e7eb; border-radius: 10px; box-shadow:0 10px 30px rgba(0,0,0,.15); display:flex; flex-direction:column; overflow:hidden; }
+.header { background:#111827; color:#fff; padding:10px 12px; font-weight:600; }
+.list { flex:1; overflow:auto; padding:10px; background:#f9fafb; }
+.bot { background:#e5e7eb; color:#111827; padding:8px 10px; border-radius:12px; margin:6px 0; width: fit-content; }
+.you { background:#111827; color:#fff; padding:8px 10px; border-radius:12px; margin:6px 0 6px auto; width: fit-content; }
+.inputRow { display:flex; gap:8px; border-top:1px solid #e5e7eb; padding:8px; }
+.inputRow input { flex:1; padding:8px; border:1px solid #e5e7eb; border-radius:8px; }
+.inputRow button { padding:8px 12px; background:#111827; color:#fff; border:none; border-radius:8px; cursor:pointer; }
