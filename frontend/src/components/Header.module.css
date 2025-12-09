@@ -1,8 +1,84 @@
-.header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--card); z-index:20; box-shadow: 0 1px 2px rgba(17,24,39,0.05); }
-.brand { font-weight:800; font-size:20px; letter-spacing:0.2px; color: var(--text); }
-.nav { display:flex; gap:10px; align-items:center; }
-.nav a { color: var(--text); text-decoration:none; padding:8px 10px; border-radius:8px; border:1px solid transparent; transition: all .2s ease; }
-.nav a:hover { background: #f3f4f6; border-color: var(--border); }
-.active { background: var(--primary); color:#fff !important; }
-.linkButton { background: var(--card); color: var(--text); border:1px solid var(--border); padding:8px 10px; border-radius:8px; cursor:pointer; transition: all .2s ease; }
-.linkButton:hover { border-color: var(--primary); transform: translateY(-1px); }
+/* ----------- NYKAA THEME HEADER ----------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: #ffffffcc;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #f2d6e6;
+}
+
+/* Brand Logo - Nykaa Style */
+.brand {
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 0.5px;
+  color: #e1007a;
+  font-family: "Poppins", sans-serif;
+  text-transform: uppercase;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav a {
+  color: #444;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  position: relative;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+/* Hover - Soft Pink Background */
+.nav a:hover {
+  background: #ffe4f3;
+  color: #e1007a;
+}
+
+/* Active Link - Nykaa Pink */
+.active {
+  background: #e1007a !important;
+  color: #fff !important;
+  box-shadow: 0px 3px 6px rgba(225, 0, 122, 0.25);
+}
+
+/* User Email Display */
+.userEmail {
+  font-size: 13px;
+  color: #888;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: #fafafa;
+  border: 1px solid #eee;
+}
+
+/* Logout Button (Styled Like Nykaa Tags) */
+.linkButton {
+  background: #ffffff;
+  color: #e1007a;
+  border: 1px solid #e1007a;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.linkButton:hover {
+  background: #e1007a;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(225, 0, 122, 0.25);
+}

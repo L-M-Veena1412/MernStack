@@ -1,10 +1,184 @@
-.root { position: fixed; bottom: 16px; right: 16px; z-index: 50; }
-.fab { width: 56px; height: 56px; border-radius: 50%; background:#111827; color:#fff; border:none; font-size:22px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,.2); }
-.panel { position: absolute; bottom: 72px; right: 0; width: 320px; height: 420px; background:#fff; border:1px solid #e5e7eb; border-radius: 10px; box-shadow:0 10px 30px rgba(0,0,0,.15); display:flex; flex-direction:column; overflow:hidden; }
-.header { background:#111827; color:#fff; padding:10px 12px; font-weight:600; }
-.list { flex:1; overflow:auto; padding:10px; background:#f9fafb; }
-.bot { background:#e5e7eb; color:#111827; padding:8px 10px; border-radius:12px; margin:6px 0; width: fit-content; }
-.you { background:#111827; color:#fff; padding:8px 10px; border-radius:12px; margin:6px 0 6px auto; width: fit-content; }
-.inputRow { display:flex; gap:8px; border-top:1px solid #e5e7eb; padding:8px; }
-.inputRow input { flex:1; padding:8px; border:1px solid #e5e7eb; border-radius:8px; }
-.inputRow button { padding:8px 12px; background:#111827; color:#fff; border:none; border-radius:8px; cursor:pointer; }
+/* Chatbot.module.css */
+
+.root {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: Arial, sans-serif;
+}
+
+.fab {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+}
+
+.panel {
+  width: 350px;
+  max-height: 500px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  background-color: #6366f1;
+  color: white;
+  font-weight: bold;
+  padding: 12px 16px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.list {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #f9fafb;
+}
+
+.bot {
+  align-self: flex-start;
+  background-color: #e0e7ff;
+  color: #1e293b;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 80%;
+  white-space: pre-wrap;
+}
+
+.you {
+  align-self: flex-end;
+  background-color: #6366f1;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 80%;
+  white-space: pre-wrap;
+}
+
+.inputRow {
+  display: flex;
+  padding: 8px;
+  border-top: 1px solid #e5e7eb;
+  background-color: white;
+}
+
+.inputRow input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 14px;
+}
+
+.inputRow button {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #6366f1;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.inputRow button:hover {
+  background-color: #4f46e5;
+}
+
+/* Quick action buttons */
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.buttonRow button {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #1f2937;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.buttonRow button:hover {
+  background-color: #6366f1;
+  color: white;
+  border-color: #4f46e5;
+}
+
+/* Product cards */
+.cardRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px;
+  width: 100px;
+  text-align: center;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+
+.card button {
+  margin-top: 4px;
+  padding: 4px 6px;
+  font-size: 11px;
+  border: none;
+  border-radius: 6px;
+  background-color: #6366f1;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.card button:hover {
+  background-color: #4f46e5;
+}
+
+/* Typing animation */
+.typing {
+  font-style: italic;
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
