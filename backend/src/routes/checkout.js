@@ -2,6 +2,9 @@ const express = require('express');
 const Cart = require('../models/Cart');
 const Order = require('../models/Order');
 const { authenticate } = require('../middleware/auth');
+const { getPayPalAccessToken } = require('../utils/paypal');
+const axios = require('axios');
+
 
 const router = express.Router();
 const INR_RATE = 83;
@@ -101,38 +104,59 @@ router.post('/stripe/confirm', authenticate, async (req, res) => {
 // ---------- PAYPAL DEMO ----------
 router.post('/paypal/create-order', authenticate, async (req, res) => {
   try {
-    const orderID = 'paypal_demo_' + Math.random().toString(36).slice(2);
-    res.json({ ok: true, id: orderID });
-  } catch {
-    res.status(400).json({ message: 'PayPal demo error' });
+    const { total } = req.body; // send total from frontend
+
+    const accessToken = await getPayPalAccessToken();
+
+    const response = await axios.post(
+      `${process.env.PAYPAL_BASE_URL}/v2/checkout/orders`,
+      {
+        intent: 'CAPTURE',
+        purchase_units: [{
+          amount: {
+            currency_code: 'INR',
+            value: total.toString(),
+          },
+        }],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    res.json({ id: response.data.id });
+  } catch (err) {
+    res.status(500).json({ message: 'PayPal order creation failed' });
   }
 });
 
 router.post('/paypal/capture', authenticate, async (req, res) => {
   try {
     const { orderID } = req.body;
-    if (!orderID) return res.status(400).json({ message: 'Missing orderID' });
 
-    const { items, total } = await loadCartWithProducts(req.user.id);
-    if (!items.length) return res.status(400).json({ message: 'Cart empty' });
+    const accessToken = await getPayPalAccessToken();
 
-    const order = await Order.create({
-      user: req.user.id,
-      items,
-      total: Math.round(total * INR_RATE),
-      currency: 'inr',
-      paymentProvider: 'paypal-demo',
-      paymentStatus: 'paid',
-      paymentId: orderID
-    });
+    await axios.post(
+      `${process.env.PAYPAL_BASE_URL}/v2/checkout/orders/${orderID}/capture`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-    await Cart.updateOne({ user: req.user.id }, { $set: { items: [] } });
-
-    res.json({ ok: true, orderId: order._id });
-  } catch {
-    res.status(400).json({ message: 'PayPal capture failed' });
+    // ✅ Create order in DB here (same logic as COD)
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ message: 'PayPal capture failed' });
   }
 });
+
 
 // ---------- CASH ON DELIVERY ----------
 router.post('/cod', authenticate, async (req, res) => {

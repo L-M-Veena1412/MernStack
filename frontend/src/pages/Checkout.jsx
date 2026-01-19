@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 
 export default function Checkout() {
   const { user } = useAuth();
@@ -17,9 +18,8 @@ export default function Checkout() {
   if (!user) return <p>Please sign in to checkout.</p>;
   if (items.length === 0) return <p>Your cart is empty.</p>;
 
-  const INR_RATE = 83; // conversion rate if product price is in USD
+  const INR_RATE = 83;
 
-  // Total price in INR
   const totalPrice = items.reduce(
     (sum, it) => sum + (it.product.price ?? 0) * INR_RATE * it.qty,
     0
@@ -57,6 +57,7 @@ export default function Checkout() {
         <div>
           <div style={{ background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
             <h2 style={{ color: '#444', marginBottom: 15 }}>Order Summary</h2>
+
             {items.map((it, idx) => (
               <div
                 key={idx}
@@ -79,7 +80,9 @@ export default function Checkout() {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 600, fontSize: 18, marginTop: 15 }}>
               <span>Total</span>
-              <span style={{ color: '#d63384' }}>₹{Math.round(totalPrice).toLocaleString('en-IN')}</span>
+              <span style={{ color: '#d63384' }}>
+                ₹{Math.round(totalPrice).toLocaleString('en-IN')}
+              </span>
             </div>
           </div>
 
@@ -103,6 +106,8 @@ export default function Checkout() {
 
         <div style={{ background: '#fff', borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
           <h2 style={{ color: '#444', marginBottom: 20 }}>Payment</h2>
+
+          {/* COD / Fake Pay */}
           <button
             onClick={placeOrder}
             disabled={loading}
@@ -117,10 +122,42 @@ export default function Checkout() {
               fontWeight: 600,
               cursor: 'pointer',
               opacity: loading ? 0.6 : 1,
+              marginBottom: 20,
             }}
           >
             {loading ? 'Placing Order...' : 'Cash on Delivery / Pay'}
           </button>
+
+          {/* PayPal Button */}
+          <PayPalButtons
+            style={{ layout: 'vertical' }}
+            createOrder={(data, actions) => {
+              if (!address.trim()) {
+                setMsg('Please enter delivery address.');
+                return;
+              }
+
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: (totalPrice / INR_RATE).toFixed(2), // PayPal expects USD
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={async (data, actions) => {
+              const details = await actions.order.capture();
+
+              // You can save order to backend here if needed
+              clear();
+              navigate(`/order-success/${details.id}`);
+            }}
+            onError={() => {
+              setMsg('PayPal payment failed');
+            }}
+          />
 
           {msg && (
             <p style={{ marginTop: 15, color: '#d63384', fontWeight: 600 }}>{msg}</p>
