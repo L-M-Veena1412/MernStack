@@ -130,34 +130,46 @@ export default function Checkout() {
 
           {/* PayPal Button */}
           <PayPalButtons
-            style={{ layout: 'vertical' }}
-            createOrder={(data, actions) => {
-              if (!address.trim()) {
-                setMsg('Please enter delivery address.');
-                return;
-              }
+  style={{ layout: 'vertical' }}
+  createOrder={async (data, actions) => {
+    if (!address.trim()) {
+      setMsg('Please enter delivery address.');
+      return;
+    }
 
-              return actions.order.create({
-                purchase_units: [
-                  {
-                    amount: {
-                      value: (totalPrice / INR_RATE).toFixed(2), // PayPal expects USD
-                    },
-                  },
-                ],
-              });
-            }}
-            onApprove={async (data, actions) => {
-              const details = await actions.order.capture();
+    try {
+      // Call backend to create order
+      const res = await api.post('/api/checkout/paypal/create-order');
+      return res.data.id; // orderID for PayPal
+    } catch (err) {
+      console.error(err);
+      setMsg('Failed to create PayPal order.');
+    }
+  }}
+  onApprove={async (data, actions) => {
+    try {
+      // Capture payment on backend
+      const res = await api.post('/api/checkout/paypal/capture', {
+        orderID: data.orderID,
+      });
 
-              // You can save order to backend here if needed
-              clear();
-              navigate(`/order-success/${details.id}`);
-            }}
-            onError={() => {
-              setMsg('PayPal payment failed');
-            }}
-          />
+      if (res.data.ok) {
+        clear();
+        navigate(`/order-success/${res.data.orderId}`);
+      } else {
+        setMsg('Failed to capture order.');
+      }
+    } catch (err) {
+      console.error(err);
+      setMsg('PayPal payment or order capture failed.');
+    }
+  }}
+  onError={(err) => {
+    console.error(err);
+    setMsg('PayPal payment failed.');
+  }}
+/>
+
 
           {msg && (
             <p style={{ marginTop: 15, color: '#d63384', fontWeight: 600 }}>{msg}</p>
